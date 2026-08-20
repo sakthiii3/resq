@@ -1,0 +1,204 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(uuid())
+  name          String
+  email         String?   @unique
+  phone         String?   @unique
+  passwordHash  String?
+  role          String    @default("PARTICIPANT") // PARTICIPANT, VOLUNTEER, ORGANIZER, ADMIN
+  isActive      Boolean   @default(true)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  eventMemberships EventMember[]
+  reportedIncidents Incident[]   @relation("ReportedIncidents")
+  assignments       IncidentAssignment[] @relation("ResponderAssignments")
+  assignedByMe      IncidentAssignment[] @relation("AssignedByMe")
+  timelineEntries   IncidentTimeline[]
+  notifications     Notification[]
+  attachments       Attachment[]
+  liveLocations     LiveLocation[]
+  auditLogs         AuditLog[]
+}
+
+model Organization {
+  id          String   @id @default(uuid())
+  name        String
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  events      Event[]
+}
+
+model Event {
+  id                 String   @id @default(uuid())
+  organizationId     String
+  name               String
+  description        String?
+  venue              String?
+  startTime          DateTime?
+  endTime            DateTime?
+  latitude           Float?
+  longitude          Float?
+  boundaryGeojson    String?
+  status             String   @default("ACTIVE")
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  organization       Organization @relation(fields: [organizationId], references: [id])
+  members            EventMember[]
+  incidents          Incident[]
+  emergencyContacts  EmergencyContact[]
+}
+
+model EventMember {
+  id                 String   @id @default(uuid())
+  eventId            String
+  userId             String
+  role               String
+  skills             String?
+  availabilityStatus String   @default("UNAVAILABLE") // AVAILABLE, UNAVAILABLE, BUSY
+  joinedAt           DateTime @default(now())
+
+  event Event @relation(fields: [eventId], references: [id])
+  user  User  @relation(fields: [userId], references: [id])
+
+  @@unique([eventId, userId])
+}
+
+model Incident {
+  id               String   @id @default(uuid())
+  eventId          String
+  reporterId       String?
+  type             String
+  description      String?
+  priority         String   @default("LOW") // LOW, MEDIUM, HIGH
+  status           String   @default("REPORTED") // REPORTED, ASSIGNED, IN_PROGRESS, RESOLVED, CANCELLED
+  latitude         Float?
+  longitude        Float?
+  locationAccuracy Float?
+  affectedPeople   Int?     @default(1)
+  severityScore    Int?     @default(1)
+  duplicateOfId    String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+  resolvedAt       DateTime?
+
+  event      Event @relation(fields: [eventId], references: [id])
+  reporter   User? @relation("ReportedIncidents", fields: [reporterId], references: [id])
+  
+  duplicateOf Incident?  @relation("DuplicateIncidents", fields: [duplicateOfId], references: [id])
+  duplicates  Incident[] @relation("DuplicateIncidents")
+
+  assignments IncidentAssignment[]
+  timeline    IncidentTimeline[]
+  attachments Attachment[]
+  locations   LiveLocation[]
+  notifications Notification[]
+}
+
+model IncidentAssignment {
+  id               String   @id @default(uuid())
+  incidentId       String
+  responderId      String
+  assignedById     String?
+  assignmentStatus String   @default("PENDING") // PENDING, ACCEPTED, DECLINED, STARTED, COMPLETED, CANCELLED
+  assignedAt       DateTime @default(now())
+  acceptedAt       DateTime?
+  startedAt        DateTime?
+  completedAt      DateTime?
+  declineReason    String?
+
+  incident   Incident @relation(fields: [incidentId], references: [id])
+  responder  User     @relation("ResponderAssignments", fields: [responderId], references: [id])
+  assignedBy User?    @relation("AssignedByMe", fields: [assignedById], references: [id])
+}
+
+model IncidentTimeline {
+  id          String   @id @default(uuid())
+  incidentId  String
+  actorId     String?
+  action      String
+  oldValue    String?
+  newValue    String?
+  note        String?
+  createdAt   DateTime @default(now())
+
+  incident Incident @relation(fields: [incidentId], references: [id])
+  actor    User?    @relation(fields: [actorId], references: [id])
+}
+
+model Notification {
+  id               String   @id @default(uuid())
+  userId           String
+  incidentId       String?
+  title            String
+  body             String
+  notificationType String
+  readAt           DateTime?
+  createdAt        DateTime @default(now())
+
+  user     User      @relation(fields: [userId], references: [id])
+  incident Incident? @relation(fields: [incidentId], references: [id])
+}
+
+model EmergencyContact {
+  id          String   @id @default(uuid())
+  eventId     String?
+  name        String
+  category    String
+  phone       String
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  event Event? @relation(fields: [eventId], references: [id])
+}
+
+model Attachment {
+  id          String   @id @default(uuid())
+  incidentId  String
+  uploadedById String
+  fileUrl     String
+  fileType    String?
+  fileSize    Int?
+  createdAt   DateTime @default(now())
+
+  incident Incident @relation(fields: [incidentId], references: [id])
+  uploader User     @relation(fields: [uploadedById], references: [id])
+}
+
+model LiveLocation {
+  id               String   @id @default(uuid())
+  userId           String
+  incidentId       String?
+  latitude         Float
+  longitude        Float
+  accuracy         Float?
+  sharingStartedAt DateTime @default(now())
+  sharingEndedAt   DateTime?
+  createdAt        DateTime @default(now())
+
+  user     User      @relation(fields: [userId], references: [id])
+  incident Incident? @relation(fields: [incidentId], references: [id])
+}
+
+model AuditLog {
+  id          String   @id @default(uuid())
+  actorId     String?
+  action      String
+  entityType  String
+  entityId    String
+  metadata    String?
+  createdAt   DateTime @default(now())
+
+  actor User? @relation(fields: [actorId], references: [id])
+}

@@ -1,0 +1,1694 @@
+RESQ KERALA MASTER SOFTWARE REQUIREMENTS SPECIFICATION (SRS) Project:
+Technology-Enabled Emergency Response System Version: 1.0 Date: 20
+August 2026 Audience: 2nd & 3rd Year IT Students / Project Team / Judges
+Document Type: Master SRS + Implementation Blueprint
+
+====================================================================== 1.
+DOCUMENT PURPOSE
+======================================================================
+
+This document defines the complete software requirements for ResQ
+Kerala, a technology-enabled emergency response platform for colleges,
+festivals, public events, campuses, and other controlled large
+gatherings.
+
+The system enables participants and volunteers to report emergencies,
+automatically capture location, classify and prioritize incidents,
+identify appropriate responders, notify organizers/volunteers, track
+response status, and maintain a complete incident history.
+
+The SRS is intentionally implementation-oriented so that a student team
+can use it as the master reference for UI design, database design, API
+development, testing, deployment, demonstration, and final
+documentation.
+
+Core workflow:
+
+REPORT -> LOCATE -> PRIORITIZE -> ASSIGN -> NOTIFY -> RESPOND -> RESOLVE
+
+======================================================================
+2. PROJECT VISION
+======================================================================
+
+Build a reliable emergency coordination system that reduces the time
+between incident reporting and first response.
+
+Primary value proposition:
+
+“We don’t just report emergencies. We help the right responder reach the
+incident quickly and give organizers visibility until resolution.”
+
+The platform is not intended to replace professional emergency services,
+police, fire, ambulance, hospital systems, or official government
+emergency infrastructure. It is an event/campus coordination and
+escalation system.
+
+======================================================================
+3. OBJECTIVES
+======================================================================
+
+3.1 Primary objectives
+
+1.  Provide fast SOS and incident reporting.
+2.  Capture incident type, description, evidence, and location.
+3.  Automatically assign Low, Medium, or High priority.
+4.  Identify appropriate available volunteers/organizers.
+5.  Notify responders and organizers in near real time.
+6.  Track incidents through Reported, Assigned, In Progress, and
+    Resolved.
+7.  Provide an organizer command dashboard.
+8.  Show incidents on a map.
+9.  Support nearest-volunteer identification.
+10. Maintain an auditable incident history.
+11. Detect probable duplicate reports.
+12. Provide emergency contacts and escalation options.
+13. Generate event-level analytics after incidents are resolved.
+
+3.2 Secondary objectives
+
+1.  Improve responder coordination.
+2.  Reduce duplicate dispatches.
+3.  Reduce manual communication overhead.
+4.  Provide evidence for post-event review.
+5.  Support multiple events/venues from one platform.
+6.  Provide a clean, accessible mobile-first user experience.
+
+======================================================================
+4. SCOPE
+======================================================================
+
+4.1 In scope
+
+-   User registration and login
+-   Role-based access
+-   Event creation and management
+-   Participant incident reporting
+-   SOS reporting
+-   GPS/location capture
+-   Manual map location selection
+-   Incident categorization
+-   Priority calculation
+-   Incident assignment
+-   Volunteer availability
+-   Nearest responder calculation
+-   Push/in-app notifications
+-   Incident status tracking
+-   Organizer dashboard
+-   Map-based incident view
+-   Incident timeline
+-   Duplicate detection
+-   Emergency contacts
+-   Escalation
+-   Attachments/photos
+-   Search/filter/sort
+-   Basic analytics
+-   Audit logging
+-   Basic privacy/security controls
+-   Offline-friendly report queuing where feasible
+-   Demo/simulation mode for project presentation
+
+4.2 Out of scope
+
+-   Automatic dispatch of government ambulances/fire engines
+-   Direct control of emergency infrastructure
+-   Medical diagnosis
+-   Professional medical advice
+-   Guaranteed emergency response
+-   Automatic police dispatch
+-   Facial recognition
+-   Weapon detection
+-   Autonomous drone dispatch
+-   Payment processing
+-   Public social-media posting
+-   Continuous tracking of every participant by default
+-   Collection of unnecessary sensitive personal information
+
+======================================================================
+5. TARGET USERS
+======================================================================
+
+5.1 Participant
+
+A person attending the event/campus.
+
+Capabilities: - View emergency information - Submit SOS - Submit
+incident - Share location - Add description/photo - View own reports -
+Receive status updates - Access emergency contacts
+
+5.2 Volunteer / Responder
+
+A trained or designated event responder.
+
+Capabilities: - Set availability - Receive incident alerts - View
+assigned incidents - Accept/decline assignment - Navigate to incident -
+Update response status - Contact reporter when permitted - Mark incident
+resolved - Add response notes
+
+5.3 Organizer / Control Room Operator
+
+Person responsible for event safety operations.
+
+Capabilities: - Create/manage event - Monitor incidents -
+Assign/reassign responders - Change priority - Escalate incidents - View
+live map - Manage volunteers - Manage emergency contacts - Review
+incident history - View analytics
+
+5.4 Administrator
+
+System-level manager.
+
+Capabilities: - Manage organizations - Manage users/roles - Configure
+incident categories - Configure priority rules - Configure event
+settings - Manage system-level emergency contacts - Audit logs - Disable
+accounts - Monitor system health
+
+======================================================================
+6. ASSUMPTIONS
+======================================================================
+
+1.  Users have a smartphone or web-capable device.
+2.  GPS/location permission may be granted by users.
+3.  Network connectivity is normally available.
+4.  Event organizers register volunteers before the event.
+5.  Volunteers have suitable permissions/training.
+6.  Maps are provided by an external mapping service.
+7.  Push notifications depend on device/network availability.
+8.  The application may show approximate location when exact location is
+    unavailable or when privacy settings require it.
+9.  Emergency contact numbers are configured and verified by the
+    organizer.
+10. The platform is an event coordination tool and not an
+    emergency-service replacement.
+
+======================================================================
+7. FUNCTIONAL REQUIREMENTS
+======================================================================
+
+FR-001 USER REGISTRATION
+
+The system shall allow a user to register using: - Name - Mobile number
+and/or email - Password or supported authentication method - Optional
+organization/event code
+
+The system shall validate required fields.
+
+FR-002 LOGIN
+
+The system shall allow authenticated users to sign in and sign out.
+
+FR-003 ROLE MANAGEMENT
+
+The system shall support: - PARTICIPANT - VOLUNTEER - ORGANIZER - ADMIN
+
+A user shall only access functions allowed by the assigned role.
+
+FR-004 EVENT CREATION
+
+Organizer/Admin shall be able to create an event containing: - Event
+name - Description - Venue - Start date/time - End date/time - Event
+boundary/location - Emergency contacts - Status
+
+FR-005 EVENT JOINING
+
+Participants and volunteers shall be able to join an event using: -
+Invitation - QR code - Event code - Organizer approval
+
+FR-006 SOS REPORTING
+
+The system shall provide a clearly visible SOS action.
+
+When SOS is activated, the system shall: 1. Create an incident. 2.
+Capture available location. 3. Set initial incident type to SOS/Unknown
+if not specified. 4. Apply priority rules. 5. Notify the appropriate
+control room/responders. 6. Display confirmation to the user. 7. Record
+timestamp.
+
+FR-007 INCIDENT REPORTING
+
+A user shall be able to report: - Medical - Fire - Missing Person -
+Crowd - Infrastructure - Electrical - Security - Other
+
+The report shall support: - Incident type - Description - Location -
+Number of affected people - Optional photo - Optional contact
+preference - Optional urgency indicator
+
+FR-008 LOCATION CAPTURE
+
+The system shall support: - Current GPS location - Map pin selection -
+Manual location description - Latitude - Longitude - Accuracy value
+where available - Timestamp
+
+If GPS fails, the user shall still be able to submit a report with a
+manual location.
+
+FR-009 LOCATION VALIDATION
+
+The system shall determine whether the location is: - Inside event
+boundary - Outside event boundary - Unknown
+
+The organizer may configure whether outside-boundary incidents are
+accepted.
+
+FR-010 PRIORITY
+
+The system shall support: - LOW - MEDIUM - HIGH
+
+Priority shall be calculated using configurable rules.
+
+Example scoring:
+
+Severity: Low = 1 Medium = 2 High = 3
+
+Affected people: 1 = 1 2-5 = 2 6+ = 3
+
+Risk indicators: No immediate danger = 0 Potential danger = 1 Immediate
+danger = 2
+
+Suggested total: 1-3 = LOW 4-6 = MEDIUM 7+ = HIGH
+
+The organizer shall be able to override priority with a recorded reason.
+
+FR-011 INCIDENT STATUS
+
+The system shall support: - REPORTED - ASSIGNED - IN_PROGRESS -
+RESOLVED - CANCELLED
+
+Optional: - ESCALATED - DUPLICATE
+
+Every status change shall be timestamped and recorded.
+
+FR-012 RESPONDER MATCHING
+
+The system shall identify candidate volunteers using: 1. Availability 2.
+Role/skill 3. Event membership 4. Distance 5. Current workload 6.
+Optional category specialization
+
+The system shall rank candidates.
+
+Example ranking formula:
+
+Responder Score = Distance Score * 0.45 + Availability Score * 0.25 +
+Skill Match * 0.20 + Workload Score * 0.10
+
+Weights shall be configurable.
+
+FR-013 NEAREST VOLUNTEER
+
+The system shall calculate approximate distance between incident and
+responder.
+
+The initial implementation may use the Haversine formula.
+
+Distance: a = sin²((lat2-lat1)/2) + cos(lat1) * cos(lat2) *
+sin²((lon2-lon1)/2) c = 2 * atan2(sqrt(a), sqrt(1-a)) distance =
+EarthRadius * c
+
+FR-014 ASSIGNMENT
+
+Organizer shall be able to: - Assign responder - Reassign responder -
+Cancel assignment - Escalate assignment
+
+A responder shall be able to accept or decline an assignment.
+
+FR-015 AUTO-ASSIGNMENT
+
+For high-priority incidents, the system may automatically notify the
+best-ranked responder.
+
+If no responder accepts within a configurable timeout, the system
+shall: 1. Notify the next candidate, or 2. Notify the organizer/control
+room, or 3. Escalate according to event configuration.
+
+FR-016 NOTIFICATIONS
+
+The system shall support: - In-app notifications - Push notifications -
+Optional SMS/email integration
+
+Notification examples: - New high-priority incident - Assignment
+received - Assignment accepted - Incident escalated - Incident resolved
+
+FR-017 INCIDENT DASHBOARD
+
+Organizer dashboard shall show: - Total incidents - High priority
+count - Medium priority count - Low priority count - Reported count -
+Assigned count - In-progress count - Resolved count - Unassigned count -
+Average response time - Average resolution time
+
+FR-018 MAP DASHBOARD
+
+Organizer shall see incidents on a map.
+
+Map features: - Incident markers - Priority indication - Incident type -
+Responder location when sharing is active - Event boundary - Optional
+heatmap - Marker clustering
+
+FR-019 INCIDENT DETAILS
+
+Incident detail page shall show: - Incident ID - Type - Description -
+Priority - Status - Location - Reporter information according to privacy
+rules - Assigned responder - Timeline - Attachments - Escalation
+history - Resolution notes
+
+FR-020 INCIDENT TIMELINE
+
+The system shall record events such as: - Created - Location captured -
+Priority changed - Assignment created - Assignment accepted - Responder
+started - Escalated - Resolved - Cancelled
+
+FR-021 RESOLUTION
+
+Responder/Organizer shall be able to resolve an incident by entering: -
+Resolution note - Optional category/result - Optional attachment -
+Timestamp
+
+FR-022 DUPLICATE DETECTION
+
+The system shall identify possible duplicates using: - Same event -
+Similar incident type - Distance threshold - Time window - Optional text
+similarity
+
+Example: Reports within 30 meters and 5 minutes with the same category
+shall be flagged as possible duplicates.
+
+The system shall not automatically delete duplicate reports.
+
+FR-023 MERGE DUPLICATES
+
+Organizer shall be able to: - Link reports - Select primary incident -
+Mark another report as duplicate - Preserve original report records
+
+FR-024 EMERGENCY CONTACTS
+
+The system shall provide a dedicated emergency contacts screen.
+
+Contacts may include: - Event control room - Medical team - Security -
+Fire - Police - Ambulance - Venue management
+
+Contacts shall be configured per event where appropriate.
+
+FR-025 LIVE LOCATION SHARING
+
+A volunteer may enable temporary live location sharing while responding.
+
+The system shall: - Clearly indicate sharing status - Record start
+time - Record stop time - Stop sharing when the response ends or user
+disables it
+
+Continuous participant tracking shall not be enabled by default.
+
+FR-026 SEARCH
+
+Organizer shall be able to search by: - Incident ID - Type - Status -
+Priority - Reporter - Responder - Date/time
+
+FR-027 FILTERING
+
+Filters: - Priority - Status - Type - Assigned/unassigned - Location -
+Time range
+
+FR-028 ANALYTICS
+
+System shall calculate: - Incident count by type - Incident count by
+priority - Incident count by location - Response time - Resolution
+time - Volunteer workload - Hourly incident distribution - Repeat-risk
+locations
+
+FR-029 EVENT HEATMAP
+
+The system may generate a heatmap from incident locations.
+
+The heatmap shall be informational and shall not be treated as a safety
+prediction without sufficient data.
+
+FR-030 AUDIT LOG
+
+Security-sensitive actions shall be logged: - Login - Role change -
+Incident creation - Priority override - Assignment - Reassignment -
+Status change - Emergency contact modification - Account disablement
+
+FR-031 DEMO MODE
+
+The project shall support a demonstration mode with synthetic incidents,
+locations, responders, and notifications.
+
+Demo mode shall clearly identify simulated data.
+
+======================================================================
+8. NON-FUNCTIONAL REQUIREMENTS
+======================================================================
+
+NFR-001 PERFORMANCE
+
+Normal API responses should target less than 2 seconds under the
+expected student-project load, excluding external map/network
+operations.
+
+NFR-002 REAL-TIME RESPONSE
+
+Incident and assignment updates should appear to connected users within
+approximately 1-5 seconds under normal network conditions.
+
+NFR-003 AVAILABILITY
+
+The system should remain operational throughout the event period,
+subject to hosting and network availability.
+
+NFR-004 SCALABILITY
+
+Initial target: - 1 event - 1,000 participants - 100 volunteers - 10
+organizers - 10,000 incidents/events records
+
+Architecture should permit future expansion.
+
+NFR-005 SECURITY
+
+Passwords shall never be stored as plaintext.
+
+Authentication shall use secure tokens/session mechanisms.
+
+Sensitive API endpoints shall require authentication and authorization.
+
+NFR-006 AUTHORIZATION
+
+Server-side authorization shall be enforced. Hiding UI controls shall
+not be considered sufficient security.
+
+NFR-007 PRIVACY
+
+The system shall collect only information necessary for emergency
+coordination.
+
+Location shall be collected only when required or explicitly enabled.
+
+Location sharing shall be visible to the user.
+
+NFR-008 RELIABILITY
+
+Incident creation should use an idempotency mechanism where possible so
+repeated submissions do not create unintended duplicates.
+
+NFR-009 USABILITY
+
+SOS must be reachable quickly.
+
+The reporting flow should require minimal typing.
+
+The interface shall use readable labels and clear status indicators.
+
+NFR-010 ACCESSIBILITY
+
+The application should support: - Large touch targets - Keyboard
+navigation where applicable - Sufficient text contrast -
+Screen-reader-friendly labels - Clear error messages
+
+NFR-011 MAINTAINABILITY
+
+Code shall be organized into: - UI/presentation - API/service - data
+access - business logic - notification - location/mapping
+
+NFR-012 LOGGING
+
+System errors shall be logged without unnecessarily exposing sensitive
+personal information.
+
+NFR-013 BACKUP
+
+Database backups should be configured according to deployment
+capability.
+
+NFR-014 BROWSER SUPPORT
+
+The web application should support current versions of major modern
+browsers.
+
+======================================================================
+9. RECOMMENDED TECHNOLOGY STACK
+======================================================================
+
+Recommended student-friendly stack:
+
+Frontend: - React - Vite - Tailwind CSS - Leaflet
+
+Backend: - Node.js - Express.js - Socket.IO
+
+Database: - PostgreSQL
+
+Authentication: - JWT or secure session-based authentication -
+bcrypt/Argon2 for password hashing
+
+Notifications: - Firebase Cloud Messaging for push notifications -
+Socket.IO for in-app real-time updates
+
+Maps: - OpenStreetMap tiles with Leaflet for a low-cost prototype OR -
+Google Maps Platform if the team has appropriate API access
+
+Storage: - Cloud object storage or Firebase Storage for attachments
+
+Deployment: - Frontend: Vercel/Netlify or equivalent - Backend:
+Render/Railway/Fly.io or equivalent - Database: managed PostgreSQL
+
+Alternative rapid-prototype stack: - Flutter - Firebase Authentication -
+Firestore - Firebase Cloud Messaging - Firebase Storage - Google
+Maps/Mapbox
+
+The team should select one stack and avoid unnecessary technology
+fragmentation.
+
+======================================================================
+10. SYSTEM ARCHITECTURE
+======================================================================
+
+Logical architecture:
+
+  ------------- -------------
+  Participant   
+  Web/Mobile    
+
+  ------------- -------------
+
+              |
+              v
+
+  ------------- -------------
+  API Gateway / 
+  Backend       
+
+  ------------- -------------
+
+              |
+     +--------+---------+----------------+
+     |        |         |                |
+     v        v         v                v
+
+Auth Incident Matching Notification Service Service Service Service | |
+| | +——–+———+—————-+ | v +————–+ | PostgreSQL | +————–+
+
+              |
+              v
+       +--------------+
+       | Map Service  |
+       +--------------+
+
+Organizer Dashboard and Volunteer UI connect to the same backend.
+
+======================================================================
+11. MAJOR MODULES
+======================================================================
+
+MODULE 1: AUTHENTICATION
+
+Features: - Register - Login - Logout - Password reset if implemented -
+Role-based access
+
+MODULE 2: EVENT MANAGEMENT
+
+Features: - Create event - Update event - Activate/deactivate event -
+Event boundary - Emergency contacts - Volunteer management
+
+MODULE 3: INCIDENT MANAGEMENT
+
+Features: - Create - Read - Update - Assign - Escalate - Resolve -
+Cancel - Merge duplicate
+
+MODULE 4: LOCATION ENGINE
+
+Features: - GPS capture - Coordinate validation - Distance calculation -
+Boundary detection - Responder proximity
+
+MODULE 5: RESPONSE MATCHING
+
+Features: - Find available responders - Rank candidates -
+Auto-assignment - Assignment timeout - Reassignment
+
+MODULE 6: NOTIFICATION ENGINE
+
+Features: - Push - In-app - Real-time events - Retry/failure handling
+
+MODULE 7: ORGANIZER CONTROL ROOM
+
+Features: - Dashboard - Live map - Incident queue - Filters -
+Assignment - Escalation - Analytics
+
+MODULE 8: VOLUNTEER APP
+
+Features: - Availability - Incoming alerts - Assignment - Navigation -
+Status updates - Resolution
+
+MODULE 9: ANALYTICS
+
+Features: - Incident trends - Response metrics - Location heatmap -
+Volunteer workload
+
+MODULE 10: AUDIT AND ADMIN
+
+Features: - Audit log - User management - Configuration - System
+monitoring
+
+======================================================================
+12. DATABASE DESIGN
+======================================================================
+
+12.1 users
+
+Fields: - id UUID PK - name VARCHAR - email VARCHAR nullable - phone
+VARCHAR nullable - password_hash VARCHAR nullable - role ENUM -
+is_active BOOLEAN - created_at TIMESTAMP - updated_at TIMESTAMP
+
+12.2 organizations
+
+-   id UUID PK
+-   name VARCHAR
+-   description TEXT
+-   created_at
+-   updated_at
+
+12.3 events
+
+-   id UUID PK
+-   organization_id FK
+-   name
+-   description
+-   venue
+-   start_time
+-   end_time
+-   latitude
+-   longitude
+-   boundary_geojson/text
+-   status
+-   created_at
+-   updated_at
+
+12.4 event_members
+
+-   id UUID PK
+-   event_id FK
+-   user_id FK
+-   role
+-   skills
+-   availability_status
+-   joined_at
+
+12.5 incidents
+
+-   id UUID PK
+-   event_id FK
+-   reporter_id FK nullable
+-   type
+-   description
+-   priority
+-   status
+-   latitude
+-   longitude
+-   location_accuracy
+-   affected_people
+-   severity_score
+-   duplicate_of_id nullable
+-   created_at
+-   updated_at
+-   resolved_at
+
+12.6 incident_assignments
+
+-   id UUID PK
+-   incident_id FK
+-   responder_id FK
+-   assigned_by FK nullable
+-   assignment_status
+-   assigned_at
+-   accepted_at
+-   started_at
+-   completed_at
+-   decline_reason nullable
+
+12.7 incident_timeline
+
+-   id UUID PK
+-   incident_id FK
+-   actor_id FK nullable
+-   action
+-   old_value JSON
+-   new_value JSON
+-   note
+-   created_at
+
+12.8 notifications
+
+-   id UUID PK
+-   user_id FK
+-   incident_id FK nullable
+-   title
+-   body
+-   notification_type
+-   read_at nullable
+-   created_at
+
+12.9 emergency_contacts
+
+-   id UUID PK
+-   event_id FK nullable
+-   name
+-   category
+-   phone
+-   description
+-   is_active
+-   created_at
+
+12.10 attachments
+
+-   id UUID PK
+-   incident_id FK
+-   uploaded_by FK
+-   file_url
+-   file_type
+-   file_size
+-   created_at
+
+12.11 live_locations
+
+-   id UUID PK
+-   user_id FK
+-   incident_id FK nullable
+-   latitude
+-   longitude
+-   accuracy
+-   sharing_started_at
+-   sharing_ended_at
+-   created_at
+
+12.12 audit_logs
+
+-   id UUID PK
+-   actor_id FK nullable
+-   action
+-   entity_type
+-   entity_id
+-   metadata JSON
+-   created_at
+
+======================================================================
+13. DATABASE RELATIONSHIPS
+======================================================================
+
+Organization 1 —- N Events
+
+Event 1 —- N Incidents
+
+Event N —- N Users through EventMembers
+
+Incident 1 —- N Assignments
+
+Incident 1 —- N TimelineEntries
+
+Incident 1 —- N Notifications
+
+Incident 1 —- N Attachments
+
+User 1 —- N AuditLogs
+
+Event 1 —- N EmergencyContacts
+
+======================================================================
+14. API SPECIFICATION
+======================================================================
+
+AUTH
+
+POST /api/auth/register POST /api/auth/login POST /api/auth/logout GET
+/api/auth/me
+
+EVENTS
+
+POST /api/events GET /api/events GET /api/events/:eventId PATCH
+/api/events/:eventId POST /api/events/:eventId/join
+
+INCIDENTS
+
+POST /api/events/:eventId/incidents POST /api/events/:eventId/sos GET
+/api/events/:eventId/incidents GET /api/incidents/:incidentId PATCH
+/api/incidents/:incidentId POST /api/incidents/:incidentId/priority POST
+/api/incidents/:incidentId/assign POST /api/incidents/:incidentId/accept
+POST /api/incidents/:incidentId/decline POST
+/api/incidents/:incidentId/start POST /api/incidents/:incidentId/resolve
+POST /api/incidents/:incidentId/escalate POST
+/api/incidents/:incidentId/merge
+
+RESPONDERS
+
+GET /api/events/:eventId/responders PATCH
+/api/responders/me/availability GET
+/api/incidents/:incidentId/responders
+
+LOCATION
+
+POST /api/location/update POST /api/location/start-sharing POST
+/api/location/stop-sharing
+
+NOTIFICATIONS
+
+GET /api/notifications PATCH /api/notifications/:id/read
+
+CONTACTS
+
+GET /api/events/:eventId/emergency-contacts POST
+/api/events/:eventId/emergency-contacts PATCH
+/api/emergency-contacts/:id DELETE /api/emergency-contacts/:id
+
+ANALYTICS
+
+GET /api/events/:eventId/analytics GET /api/events/:eventId/heatmap
+
+ADMIN
+
+GET /api/admin/users PATCH /api/admin/users/:id GET
+/api/admin/audit-logs
+
+======================================================================
+15. API RESPONSE STANDARD
+======================================================================
+
+Success:
+
+{ “success”: true, “data”: {}, “message”: “Operation completed
+successfully” }
+
+Error:
+
+{ “success”: false, “error”: { “code”: “INCIDENT_NOT_FOUND”, “message”:
+“Incident not found” } }
+
+HTTP status codes: 200 - success 201 - created 400 - validation error
+401 - unauthenticated 403 - unauthorized 404 - not found 409 - conflict
+429 - rate limited 500 - server error
+
+======================================================================
+16. REAL-TIME EVENTS
+======================================================================
+
+Suggested Socket.IO events:
+
+incident:created incident:updated incident:priority_changed
+incident:assigned incident:accepted incident:declined incident:started
+incident:escalated incident:resolved responder:location_updated
+notification:new
+
+Example flow:
+
+Client A creates incident -> Backend stores incident -> Backend
+calculates priority -> Backend finds responders -> Backend emits
+incident:created -> Notification service sends responder alert ->
+Organizer dashboard receives real-time update
+
+======================================================================
+17. UI/UX REQUIREMENTS
+======================================================================
+
+17.1 Participant home
+
+Must contain: - SOS button - Report Incident - Emergency Contacts - My
+Reports - Current Event
+
+17.2 Incident form
+
+Fields: - Type - Description - Affected people - Location - Photo -
+Urgency
+
+Keep the form short.
+
+17.3 Volunteer home
+
+Show: - Availability toggle - Active assignment - Nearby alerts if
+authorized - Response history
+
+17.4 Organizer dashboard
+
+Layout: Top: - KPI cards
+
+Middle: - Live map - Incident queue
+
+Side/bottom: - Incident details - Assignment controls - Activity
+timeline
+
+17.5 Color/visual conventions
+
+Use semantic visual indicators: - High: red-style warning - Medium:
+amber-style warning - Low: green-style indicator - Resolved:
+neutral/success indication
+
+Do not rely on color alone; always show text labels.
+
+======================================================================
+18. SOS UX
+======================================================================
+
+The SOS control shall: 1. Be clearly visible. 2. Require minimal
+interaction. 3. Provide a confirmation step where practical to reduce
+accidental triggers. 4. For an actual high-risk SOS, prioritize speed.
+5. Immediately show that the request was received. 6. Display the
+incident ID. 7. Show responder/control-room status when available.
+
+Suggested screen:
+
+EMERGENCY
+
+[ HOLD TO SEND SOS ]
+
+Location: Capturing… Status: Ready
+
+After submission:
+
+SOS SENT Incident: INC-1042 Priority: HIGH Location shared: YES
+Responder: Being assigned
+
+[CALL EMERGENCY CONTACT] [VIEW STATUS]
+
+======================================================================
+19. PRIORITY ENGINE
+======================================================================
+
+Priority must be deterministic and explainable.
+
+Suggested rules:
+
+HIGH: - Fire - Unconscious/unresponsive person - Severe medical
+emergency - Multiple injured people - Active dangerous infrastructure -
+Immediate crowd crush risk - Explicit SOS with critical indicators
+
+MEDIUM: - Minor injury - Lost person - Significant crowding - Electrical
+issue without immediate danger - Infrastructure issue affecting event
+operations
+
+LOW: - Lost item - Minor maintenance issue - Non-urgent request
+
+The system should show a short explanation:
+
+“High priority because: medical + 3 affected people.”
+
+Organizer can override with reason.
+
+======================================================================
+20. RESPONDER MATCHING ALGORITHM
+======================================================================
+
+Input: - Incident coordinates - Incident type - Priority - Event -
+Available responders
+
+Filter: 1. Active user 2. Event member 3. Volunteer role 4. Available 5.
+Suitable skill where configured
+
+Rank: - Distance - Skill match - Current assignment count - Recent
+workload - Availability
+
+Example:
+
+Candidate A: 150m, medical trained, 0 active tasks Candidate B: 90m, no
+medical skill, 1 active task Candidate C: 300m, medical trained, 0
+active tasks
+
+The system may select A instead of simply choosing B.
+
+This demonstrates “nearest suitable volunteer” rather than “nearest
+user.”
+
+======================================================================
+21. DUPLICATE DETECTION
+======================================================================
+
+Initial rule:
+
+If: same event AND same/similar incident type AND distance <= 30m AND
+time difference <= 5 minutes
+
+then flag as possible duplicate.
+
+Optional text similarity can improve accuracy.
+
+UI:
+
+POSSIBLE DUPLICATE
+
+Incident INC-100 Medical 2 minutes ago 25m away
+
+Incident INC-101 Medical Now 18m away
+
+[MERGE] [KEEP SEPARATE]
+
+Never silently discard a user report.
+
+======================================================================
+22. ESCALATION LOGIC
+======================================================================
+
+Example:
+
+T+0: Incident reported.
+
+T+10 sec: High-priority notification sent.
+
+T+60 sec: No responder accepted.
+
+T+60 sec: Next suitable responder notified.
+
+T+120 sec: Organizer alerted.
+
+T+180 sec: Incident marked escalated.
+
+Thresholds shall be configurable.
+
+Do not claim that these timings guarantee real-world emergency response.
+
+======================================================================
+23. LOCATION PRIVACY
+======================================================================
+
+Rules: 1. Ask for location permission. 2. Explain why location is
+required. 3. Do not continuously track participants by default. 4. Store
+location only when necessary. 5. Volunteer live location is temporary.
+6. Access to location is role-restricted. 7. Retention period should be
+configurable. 8. Location should not be exposed publicly.
+
+Suggested retention: - Active event: full operational data - Post-event:
+organizer-configured retention - Old operational location data:
+delete/anonymize where appropriate
+
+======================================================================
+24. SECURITY REQUIREMENTS
+======================================================================
+
+1.  HTTPS in production.
+2.  Password hashing.
+3.  JWT/session expiration.
+4.  Role-based authorization.
+5.  Input validation.
+6.  SQL injection prevention through parameterized queries/ORM.
+7.  XSS protection.
+8.  CSRF protection where applicable.
+9.  Rate limiting for login/SOS APIs.
+10. File type and file size validation.
+11. Secure file storage.
+12. Do not expose secrets in frontend code.
+13. Environment variables for credentials.
+14. Audit security-sensitive actions.
+15. Validate all IDs and ownership server-side.
+
+Special protection: - SOS endpoint must be rate-limited but should
+remain usable during real incidents. - Repeated taps should be
+idempotent where possible. - Prevent users from changing incident
+ownership without permission.
+
+======================================================================
+25. NOTIFICATION DESIGN
+======================================================================
+
+Notification priority:
+
+HIGH: - Push immediately - In-app alert - Organizer alert - Optional
+escalation
+
+MEDIUM: - Push/in-app - Organizer dashboard
+
+LOW: - In-app - Optional push
+
+Notification states: QUEUED SENT DELIVERED if provider supports it READ
+FAILED
+
+If push fails, the dashboard must still show the incident.
+
+======================================================================
+26. ERROR HANDLING
+======================================================================
+
+GPS unavailable: “Location could not be detected. Please choose your
+location on the map.”
+
+Network unavailable: “Connection unavailable. Your report will be
+retried when possible.”
+
+No responders: “No suitable responder is currently available. Control
+room has been notified.”
+
+Notification failure: “Incident created successfully. Notification
+delivery is pending.”
+
+Invalid attachment: “File type or size is not supported.”
+
+Unauthorized: “You do not have permission to perform this action.”
+
+======================================================================
+27. OFFLINE/POOR NETWORK STRATEGY
+======================================================================
+
+For mobile/PWA implementation:
+
+1.  Cache essential event configuration.
+2.  Allow report drafting offline.
+3.  Queue report submission.
+4.  Retry when network returns.
+5.  Prevent duplicate submission using client-generated request ID.
+6.  Clearly show “Pending upload” state.
+
+Do not claim real-time functionality while the device is offline.
+
+======================================================================
+28. TESTING STRATEGY
+======================================================================
+
+28.1 Unit testing
+
+Test: - Priority calculation - Haversine distance - Responder ranking -
+Duplicate detection - Status transitions - Permission checks
+
+28.2 Integration testing
+
+Test: - Login -> API - Incident -> database - Incident -> notification -
+Assignment -> responder - Resolution -> analytics
+
+28.3 UI testing
+
+Test: - SOS - Incident form - Dashboard filters - Assignment -
+Resolution - Emergency contacts
+
+28.4 Security testing
+
+Test: - Unauthorized incident access - Unauthorized role actions -
+Invalid tokens - Rate limiting - Malicious file uploads - Input
+injection
+
+28.5 Performance testing
+
+Simulate: - 100 simultaneous users - 20 incidents/minute - 50 responder
+location updates/minute
+
+28.6 Real-time testing
+
+Verify: - Dashboard updates - Notification delivery - Assignment
+changes - Responder location updates
+
+======================================================================
+29. TEST CASES
+======================================================================
+
+TC-001 Name: Participant creates medical incident Given: Logged-in
+participant When: Participant submits medical incident Then: Incident is
+created with location and status REPORTED
+
+TC-002 Name: High-priority SOS Given: Participant reports critical SOS
+When: System evaluates incident Then: Priority becomes HIGH
+
+TC-003 Name: Nearest suitable volunteer Given: Three available
+volunteers When: Incident is created Then: Candidate ranking is
+calculated
+
+TC-004 Name: Volunteer accepts assignment Given: Assigned volunteer
+When: Volunteer accepts Then: Assignment becomes accepted and incident
+becomes ASSIGNED
+
+TC-005 Name: Start response Given: Accepted assignment When: Volunteer
+starts response Then: Incident becomes IN_PROGRESS
+
+TC-006 Name: Resolve incident Given: In-progress incident When:
+Volunteer submits resolution Then: Incident becomes RESOLVED
+
+TC-007 Name: Duplicate detection Given: Two nearby same-type incidents
+within threshold When: Second incident is created Then: System flags
+possible duplicate
+
+TC-008 Name: Organizer override Given: Incident priority MEDIUM When:
+Organizer changes priority to HIGH and provides reason Then: Priority
+becomes HIGH and audit entry exists
+
+TC-009 Name: No responder Given: No available suitable responders When:
+High-priority incident is created Then: Organizer is notified
+
+TC-010 Name: Permission denial Given: Participant When: Participant
+attempts admin endpoint Then: Server returns 403
+
+TC-011 Name: GPS unavailable Given: Device cannot obtain GPS When: User
+submits incident Then: User can manually select location
+
+TC-012 Name: Repeated SOS submission Given: Client retry occurs When:
+Same request ID is received twice Then: System avoids creating
+unintended duplicate incidents
+
+======================================================================
+30. ACCEPTANCE CRITERIA
+======================================================================
+
+The project is considered functionally complete when:
+
+1.  A participant can create an incident.
+2.  GPS/manual location works.
+3.  Incident type is captured.
+4.  Priority is assigned.
+5.  Incident appears on organizer dashboard.
+6.  Suitable volunteer is identified.
+7.  Volunteer receives notification.
+8.  Volunteer accepts assignment.
+9.  Incident changes to IN_PROGRESS.
+10. Organizer can see response status.
+11. Volunteer can resolve incident.
+12. Complete timeline is stored.
+13. Emergency contacts are available.
+14. Map displays incidents.
+15. Unauthorized actions are blocked.
+16. Duplicate reports can be flagged.
+17. Basic analytics are available.
+18. System can be demonstrated end-to-end.
+
+======================================================================
+31. PROJECT DEVELOPMENT PHASES
+======================================================================
+
+PHASE 1 - Planning - Finalize requirements - Identify roles - Finalize
+use cases - Design architecture - Design database
+
+PHASE 2 - UI/UX - Participant screens - Volunteer screens - Organizer
+dashboard - Map - Incident flow
+
+PHASE 3 - Backend - Authentication - Event management - Incident APIs -
+Assignment logic - Database
+
+PHASE 4 - Location - GPS - Maps - Distance engine - Responder matching
+
+PHASE 5 - Real-time - Socket/WebSocket - Push notifications - Live
+dashboard
+
+PHASE 6 - Advanced - Duplicate detection - Heatmap - Analytics - Live
+responder location
+
+PHASE 7 - Security/testing - Authorization - Validation - Rate
+limiting - Unit/integration tests
+
+PHASE 8 - Deployment - Production environment - Database - Environment
+variables - Monitoring - Demo data
+
+PHASE 9 - Final presentation - Scenario rehearsal - Screenshots -
+Architecture diagram - Demo script - Metrics
+
+======================================================================
+32. TEAM DIVISION FOR 4 STUDENTS
+======================================================================
+
+Student 1 - Frontend / Participant - Participant UI - SOS - Incident
+form - Authentication UI
+
+Student 2 - Backend - APIs - Authentication - Incident management -
+Database
+
+Student 3 - Maps / Responder - Maps - Location - Nearest volunteer -
+Volunteer interface - Live location
+
+Student 4 - Organizer / Real-time - Dashboard - Notifications -
+Analytics - WebSockets - Testing/deployment
+
+If only 2 students: Student A: Frontend + organizer dashboard
+
+Student B: Backend + database + location
+
+Integrate early rather than waiting until the end.
+
+======================================================================
+33. PROJECT DIRECTORY STRUCTURE
+======================================================================
+
+Suggested monorepo:
+
+resq-kerala/ | +– client/ | +– src/ | +– components/ | +– pages/ | +–
+layouts/ | +– hooks/ | +– services/ | +– store/ | +– utils/ | +– maps/ |
++– server/ | +– src/ | +– controllers/ | +– routes/ | +– services/ | +–
+middleware/ | +– models/ | +– validators/ | +– sockets/ | +– utils/ | +–
+config/ | +– database/ | +– migrations/ | +– seed/ | +– docs/ | +–
+SRS.txt | +– API.md | +– architecture/ | +– diagrams/ | +– tests/ | +–
+README.md +– .env.example
+
+======================================================================
+34. SCREEN LIST
+======================================================================
+
+PUBLIC: 1. Landing 2. Login 3. Register
+
+PARTICIPANT: 4. Home 5. SOS confirmation 6. Report incident 7. Location
+picker 8. My incidents 9. Incident detail 10. Emergency contacts 11.
+Profile
+
+VOLUNTEER: 12. Volunteer home 13. Availability 14. Assignment alert 15.
+Active response 16. Navigation/map 17. Resolve incident 18. Response
+history
+
+ORGANIZER: 19. Dashboard 20. Live map 21. Incident queue 22. Incident
+details 23. Assignment panel 24. Volunteer management 25. Emergency
+contacts 26. Analytics 27. Event settings
+
+ADMIN: 28. Users 29. Organizations 30. Events 31. System settings 32.
+Audit logs
+
+======================================================================
+35. DASHBOARD KPI DEFINITIONS
+======================================================================
+
+Total Incidents: Count of incidents created for the selected event/time
+period.
+
+High Priority: Count of incidents currently classified HIGH.
+
+Unassigned: Incidents with no active assignment.
+
+Average Response Time: Average time from incident creation to responder
+start.
+
+Average Assignment Time: Average time from creation to accepted
+assignment.
+
+Average Resolution Time: Average time from creation to resolution.
+
+Resolution Rate: Resolved incidents / total incidents * 100.
+
+Responder Utilization: Active response assignments / available
+responders, subject to the selected reporting definition.
+
+======================================================================
+36. DEMO SCENARIO
+======================================================================
+
+Event: “Kerala Tech Fest 2026”
+
+Participants: 1,000 simulated users
+
+Responders: 20 simulated volunteers
+
+Scenario:
+
+1.  Participant reports a medical emergency.
+2.  GPS captures location.
+3.  Incident is created.
+4.  System calculates HIGH priority.
+5.  Dashboard receives incident.
+6.  Matching engine finds three candidate responders.
+7.  Nearest suitable responder is notified.
+8.  Responder accepts.
+9.  Incident becomes ASSIGNED.
+10. Responder starts response.
+11. Live location appears on organizer map.
+12. Organizer sees incident and responder.
+13. Responder resolves incident.
+14. Resolution note is saved.
+15. Incident becomes RESOLVED.
+16. Analytics update.
+
+Second scenario: Five participants report the same crowd incident.
+System flags possible duplicates. Organizer merges/link reports. Only
+one response operation is maintained.
+
+======================================================================
+37. JUDGE DEMONSTRATION SCRIPT
+======================================================================
+
+Opening: “During a large event, the problem is not only detecting an
+emergency. The real challenge is coordinating the response.”
+
+Demo:
+
+1.  Show participant phone.
+2.  Press SOS.
+3.  Show GPS capture.
+4.  Submit incident.
+5.  Switch to organizer dashboard.
+6.  Show new high-priority incident.
+7.  Show map location.
+8.  Show responder ranking.
+9.  Show volunteer notification.
+10. Accept assignment.
+11. Start response.
+12. Show live status on organizer screen.
+13. Resolve.
+14. Show incident timeline.
+15. Trigger duplicate incident.
+16. Show duplicate warning.
+17. Show heatmap/analytics.
+18. Finish with response-time metrics.
+
+======================================================================
+38. PROJECT DIFFERENTIATORS
+======================================================================
+
+The team should emphasize:
+
+1.  End-to-end incident lifecycle.
+2.  Smart priority rather than manual-only priority.
+3.  Suitable-nearest responder matching.
+4.  Organizer command center.
+5.  Real-time incident updates.
+6.  Duplicate report reduction.
+7.  Temporary live responder location.
+8.  Post-event analytics.
+9.  Privacy-aware location handling.
+10. Explainable algorithms rather than unnecessary AI.
+
+======================================================================
+39. OPTIONAL FUTURE FEATURES
+======================================================================
+
+Future versions may include:
+
+1.  Multilingual interface including Malayalam.
+2.  Voice-based SOS.
+3.  SMS fallback.
+4.  WhatsApp/business notification integration where legally and
+    technically appropriate.
+5.  AI-assisted incident categorization.
+6.  Crowd-density estimation from authorized sensors/cameras.
+7.  Risk-zone prediction using historical event data.
+8.  QR-based volunteer check-in.
+9.  Wearable integration.
+10. IoT panic buttons.
+11. Hospital coordination.
+12. Public authority integration.
+13. Offline-first mobile application.
+14. Advanced GIS.
+15. Automatic incident summarization.
+
+These should not be required for the first working version.
+
+======================================================================
+40. AI POLICY FOR THE PROJECT
+======================================================================
+
+If AI is used, it should assist rather than replace emergency decision
+making.
+
+Acceptable student-project AI use: - Classify incident text into
+categories - Summarize incident description - Detect similar incident
+descriptions - Suggest priority for organizer review
+
+AI output shall be clearly treated as a recommendation.
+
+The final priority/dispatch decision should remain deterministic and/or
+under authorized human control.
+
+Avoid claiming that an AI model can diagnose medical conditions or
+guarantee emergency outcomes.
+
+======================================================================
+41. DATA PRIVACY PRINCIPLES
+======================================================================
+
+Collect: - Minimum identity information - Incident information -
+Necessary location - Necessary response information
+
+Avoid collecting: - Unnecessary contacts - Continuous participant
+movement - Unrelated personal information - Sensitive information not
+needed for response
+
+Users should be informed about: - What location is collected - Why it is
+collected - Who can see it - How long it is retained - How sharing can
+be stopped where applicable
+
+For a real deployment in India, the team should obtain appropriate
+legal, institutional, and privacy review before processing real
+emergency data.
+
+======================================================================
+42. DEPLOYMENT CHECKLIST
+======================================================================
+
+[ ] Production database created [ ] Database migrations run [ ]
+Environment variables configured [ ] Authentication tested [ ] HTTPS
+enabled [ ] CORS configured [ ] Push notification credentials configured
+[ ] Map API configuration tested [ ] File upload limits configured [ ]
+Rate limiting enabled [ ] Error logging enabled [ ] Backup strategy
+configured [ ] Demo accounts created [ ] Demo event created [ ]
+Emergency contacts verified [ ] Test incidents seeded [ ] Mobile
+responsiveness tested [ ] Final end-to-end test completed
+
+======================================================================
+43. FINAL PROJECT CHECKLIST
+======================================================================
+
+[ ] Participant can register/login [ ] Participant can join event [ ]
+Participant can press SOS [ ] Participant can report incident [ ]
+Location captured [ ] Manual location fallback works [ ] Priority engine
+works [ ] Incident appears on dashboard [ ] Volunteer availability works
+[ ] Responder matching works [ ] Notification works [ ] Assignment works
+[ ] Status transitions work [ ] Live map works [ ] Live responder
+location works if implemented [ ] Duplicate detection works [ ]
+Emergency contacts work [ ] Incident resolution works [ ] Timeline works
+[ ] Analytics work [ ] Audit log works [ ] Role security works [ ] Error
+handling works [ ] Demo mode works [ ] Deployment works
+
+======================================================================
+44. MINIMUM VIABLE PRODUCT
+======================================================================
+
+If project time is limited, implement only:
+
+1.  Authentication
+2.  Event
+3.  Participant incident reporting
+4.  SOS
+5.  GPS location
+6.  Priority
+7.  Volunteer registration/availability
+8.  Nearest responder
+9.  Notification
+10. Organizer dashboard
+11. Incident status
+12. Resolution
+13. Emergency contacts
+14. Basic map
+
+This is the minimum feature set for a convincing demonstration.
+
+======================================================================
+45. RECOMMENDED BONUS ORDER
+======================================================================
+
+After MVP, implement in this order:
+
+1.  Real-time dashboard
+2.  Push notifications
+3.  Live responder location
+4.  Duplicate detection
+5.  Heatmap
+6.  Analytics
+7.  Offline support
+8.  AI assistance
+
+Do not start with AI before the core response workflow is reliable.
+
+======================================================================
+46. SUCCESS METRICS
+======================================================================
+
+For a student prototype, track:
+
+1.  Time to create incident
+2.  Time to assign responder
+3.  Time to accept assignment
+4.  Time to start response
+5.  Time to resolve
+6.  Percentage of incidents successfully assigned
+7.  Duplicate reports detected
+8.  Notification delivery success
+9.  Dashboard update latency
+
+Example demo metric:
+
+“Average assignment time reduced from manual coordination to an
+automated candidate-selection workflow.”
+
+Use measured prototype results rather than unsupported real-world
+claims.
+
+======================================================================
+47. RISKS AND MITIGATION
+======================================================================
+
+Risk: GPS inaccurate Mitigation: Show accuracy and provide manual map
+selection.
+
+Risk: No internet Mitigation: Queue reports where feasible and show
+connection status.
+
+Risk: No responder available Mitigation: Escalate to organizer/control
+room.
+
+Risk: Too many duplicate reports Mitigation: Duplicate detection and
+incident merging.
+
+Risk: Notification failure Mitigation: Dashboard fallback and retry.
+
+Risk: Privacy concerns Mitigation: Minimal collection and temporary live
+location.
+
+Risk: False SOS Mitigation: Confirmation/hold interaction and incident
+audit trail.
+
+Risk: Incorrect automatic priority Mitigation: Explainable rules and
+organizer override.
+
+Risk: Student team over-scopes Mitigation: Complete MVP before bonus
+features.
+
+======================================================================
+48. DEFINITION OF DONE
+======================================================================
+
+A feature is complete only when:
+
+1.  UI exists.
+2.  Backend endpoint exists.
+3.  Database persistence works.
+4.  Authorization is implemented.
+5.  Validation is implemented.
+6.  Error states are handled.
+7.  Real-time behavior works where required.
+8.  At least one automated/manual test exists.
+9.  Feature works in deployed environment.
+10. Feature is demonstrated in the final scenario.
+
+======================================================================
+49. FINAL RECOMMENDED PRODUCT NAME
+======================================================================
+
+Product: RESQ KERALA
+
+Tagline: “From SOS to Resolution.”
+
+Alternative names: - Kerala RescueGrid - EventResQ - SafeFest -
+CampusResQ - CrowdShield - RapidResQ
+
+Recommended presentation title:
+
+“ResQ Kerala: A Smart Real-Time Emergency Response and Volunteer
+Coordination Platform”
+
+======================================================================
+50. FINAL IMPLEMENTATION PRIORITY
+======================================================================
+
+P0 - MUST HAVE - Authentication - Roles - Event - SOS - Incident
+reporting - GPS - Priority - Assignment - Notifications - Status
+tracking - Organizer dashboard - Emergency contacts - Resolution
+
+P1 - SHOULD HAVE - Live map - Nearest responder - Real-time updates -
+Incident timeline - Search/filter - Analytics
+
+P2 - BONUS - Live location - Duplicate detection - Heatmap - Offline
+queue - AI-assisted classification
+
+P3 - FUTURE - SMS fallback - IoT - Authority integration - Hospital
+integration - Predictive analytics - Advanced crowd intelligence
+
+======================================================================
+END OF MASTER SRS
+======================================================================
+
+Document owner: ResQ Kerala Project Team
+
+Version: 1.0
+
+Status: Master Development Specification
+
+Important: This document is a software project specification, not a
+substitute for official emergency-management procedures, professional
+medical guidance, government emergency systems, legal review,
+institutional approval, or real-world safety certification.

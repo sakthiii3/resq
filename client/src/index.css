@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #ff2a5f;
+  --color-secondary: #0f172a;
+  --color-glass: rgba(255, 255, 255, 0.05);
+  --color-glassborder: rgba(255, 255, 255, 0.1);
+
+  --animate-radar-ping: radar-ping 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+
+  @keyframes radar-ping {
+    75%, 100% {
+      transform: scale(1.5);
+      opacity: 0;
+    }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+}
+
+@layer base {
+  body {
+    @apply bg-secondary text-slate-100 antialiased;
+    background-image: 
+      radial-gradient(circle at 15% 50%, rgba(255, 42, 95, 0.08), transparent 25%),
+      radial-gradient(circle at 85% 30%, rgba(0, 212, 255, 0.08), transparent 25%);
+  }
+}
+
+@layer utilities {
+  .glass-card {
+    @apply bg-glass backdrop-blur-xl border border-glassborder shadow-2xl;
+  }
+  .neon-glow {
+    box-shadow: 0 0 20px rgba(255, 42, 95, 0.5), 0 0 40px rgba(255, 42, 95, 0.3);
+  }
+}
